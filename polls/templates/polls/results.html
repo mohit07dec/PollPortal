@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: hsla(0, 27%, 38%, 0.23);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px; /* Limit the width of the container */
+            text-align: center;
+        }
+
+        fieldset {
+            border: none;
+        }
+
+        legend {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px; /* Add some space above the link */
+            text-decoration: none;
+            color: #007bff; /* Link color */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline link on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h1>{{ question.question_text }}{{" Result"}}</h1></legend>
+                {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                {% endif %}
+                <ul>
+                    {% for choice in question.choice_set.all %}
+                        <li>{{ choice.choice_text }}  ==>  {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+                    {% endfor %}
+                </ul>
+            </fieldset>
+            <!-- <input type="submit" value="Vote"> -->
+        </form>
+        <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+    </div>
+</body>
+</html>
